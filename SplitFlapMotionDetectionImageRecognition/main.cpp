@@ -32,7 +32,7 @@ int main()
 	}	
 
 	//App app(videoFeedManager, &motionDetector, &imageTracker);
-	App app(videoFeedManager, &motionDetector, &imageTracker);
+	App app(videoFeedManager);
 	app.Run();
 
     return 0;
