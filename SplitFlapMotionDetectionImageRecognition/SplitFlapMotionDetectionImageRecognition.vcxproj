@@ -126,14 +126,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="IFeedManager.cpp" />
     <ClCompile Include="LiveFeedManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MotionDetector.cpp" />
     <ClCompile Include="VideoFeedManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="customtypes.h" />
     <ClInclude Include="IFeedManager.h" />
     <ClInclude Include="LiveFeedManager.h" />
+    <ClInclude Include="MotionDetector.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="VideoFeedManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

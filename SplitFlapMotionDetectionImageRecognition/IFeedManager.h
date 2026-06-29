@@ -11,6 +11,5 @@ public:
 	virtual int GetFrameWidth() = 0;
 	virtual int GetFrameHeight() = 0;
 	virtual bool IsFeedOpen() = 0;
-	virtual void Run() = 0;
 };
 

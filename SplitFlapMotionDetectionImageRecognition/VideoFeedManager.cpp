@@ -51,30 +51,6 @@ bool VideoFeedManager::IsFeedOpen()
 	return videoCapture.isOpened();
 }
 
-void VideoFeedManager::Run()
-{
-	cv::Mat frame;
-	bool isRunning = true;
-
-	while (isRunning)
-	{
-		if (!ReadNextFrame(frame))
-		{
-			std::cerr << "Error: Could not read frame from video!" << std::endl;
-			break;
-		}
-
-		cv::imshow("Video Feed", frame);
-
-
-		char key = (char)cv::waitKey(16);
-		if (key == 27) // ESC key
-		{
-			isRunning = false;
-		}
-	}
-}
-
 void VideoFeedManager::LoopVideo(cv::Mat& frame)
 {
 	std::cout << "Video ended. Rewinding..." << std::endl;

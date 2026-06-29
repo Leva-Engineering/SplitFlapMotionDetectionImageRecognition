@@ -27,30 +27,6 @@ bool LiveFeedManager::ReadNextFrame(cv::Mat& frame)
 	return !frame.empty();
 }
 
-void LiveFeedManager::Run()
-{
-	cv::Mat frame;
-	bool isRunning = true;	
-	
-	while (isRunning)
-	{
-		if (!ReadNextFrame(frame))
-		{
-			std::cerr << "Error: Could not read frame from camera!" << std::endl;
-			break;
-		}
-
-
-		cv::imshow("Live Feed", frame);
-		
-		char key = (char)cv::waitKey(16);
-		if (key == 27) // ESC key
-		{
-			isRunning = false;
-		}
-	}
-}
-
 bool LiveFeedManager::ScanAndSelectCamera()
 {
 	std::vector<int> availableCameras;

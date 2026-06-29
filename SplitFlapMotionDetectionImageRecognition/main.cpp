@@ -2,18 +2,11 @@
 #include <iostream>
 #include "LiveFeedManager.h"
 #include "VideoFeedManager.h"
+#include "MotionDetector.h"
+#include "App.h"
 
 int main() 
 {
-	/*LiveFeedManager liveFeedManager(1280, 720);
-	if (!liveFeedManager.Initialize())
-	{
-		std::cerr << "Failed to initialize the live feed manager." << std::endl;
-		return -1;
-	}
-
-	liveFeedManager.Run();*/
-	
 	VideoFeedManager videoFeedManager("split_flap2.mp4");
 	if (!videoFeedManager.Initialize())
 	{
@@ -21,6 +14,18 @@ int main()
 		return -1;
 	}
 
-	videoFeedManager.Run();	
+	/*LiveFeedManager liveFeedManager(1280, 720);
+	if (!liveFeedManager.Initialize())
+	{
+		std::cerr << "Failed to initialize the live feed manager." << std::endl;
+		return -1;
+	}*/
+
+	MotionDetector motionDetector(videoFeedManager);
+	motionDetector.Initialize();
+
+	App app(videoFeedManager, motionDetector);
+	app.Run();
+
     return 0;
 }

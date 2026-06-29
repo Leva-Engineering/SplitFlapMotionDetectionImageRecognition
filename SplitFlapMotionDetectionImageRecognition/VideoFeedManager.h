@@ -18,7 +18,6 @@ public:
 	int GetFrameWidth() override;
 	int GetFrameHeight() override;
 	bool IsFeedOpen() override;
-	void Run() override;
 
 private:
 	void LoopVideo(cv::Mat& frame);
