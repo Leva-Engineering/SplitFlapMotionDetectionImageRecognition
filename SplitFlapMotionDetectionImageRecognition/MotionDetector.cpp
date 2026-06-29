@@ -82,6 +82,7 @@ void MotionDetector::ProcessFrame(cv::Mat& frame)
 		}
 	}
 
+	//Updates the thead-safe threshold mask and motion pixel count for main thread access
 	{
 		std::lock_guard<std::mutex> lock(dataMutex);
 		tempMask.copyTo(thresholdMask);

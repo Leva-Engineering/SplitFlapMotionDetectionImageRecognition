@@ -3,6 +3,9 @@
 #include <iostream>
 #include <string>
 
+/*
+* Handles video feed from a video file source
+*/
 class VideoFeedManager : public IFeedManager
 {
 private:
