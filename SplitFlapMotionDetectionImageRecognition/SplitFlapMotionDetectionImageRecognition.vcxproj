@@ -126,7 +126,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IFeedManager.cpp" />
+    <ClCompile Include="LiveFeedManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="VideoFeedManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IFeedManager.h" />
+    <ClInclude Include="LiveFeedManager.h" />
+    <ClInclude Include="VideoFeedManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
