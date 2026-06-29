@@ -24,7 +24,15 @@ int main()
 	MotionDetector motionDetector(videoFeedManager);
 	motionDetector.Initialize();
 
-	App app(videoFeedManager, motionDetector);
+	ImageTracker imageTracker(videoFeedManager);
+	if (!imageTracker.Initialize("SplitFlap.jpg"))
+	{
+		std::cerr << "Failed to initialize the image tracker." << std::endl;
+		return -1;
+	}	
+
+	//App app(videoFeedManager, &motionDetector, &imageTracker);
+	App app(videoFeedManager, &motionDetector, &imageTracker);
 	app.Run();
 
     return 0;
