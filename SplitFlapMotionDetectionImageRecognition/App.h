@@ -2,6 +2,8 @@
 #include "IFeedManager.h"
 #include "MotionDetector.h"
 #include "ImageTracker.h"
+#include "LiveFeedManager.h"
+#include "VideoFeedManager.h"
 #include "utils.h"
 #include <thread>
 #include <atomic>
@@ -10,7 +12,9 @@
 class App
 {
 private:
-	IFeedManager& feedManager;
+	LiveFeedManager* liveFeedManager;
+	VideoFeedManager* videoFeedManager;
+	IFeedManager* feedManager;
 	MotionDetector* motionDetector;
 	ImageTracker* imageTracker;
 
@@ -30,8 +34,11 @@ private:
 	double fps = 0.0;
 
 public:
-	App(IFeedManager& feedManager, MotionDetector* motionDetector = nullptr, ImageTracker* imageTracker = nullptr);
+	App();
 	~App();
+
+	bool InitLiveFeed(int width = 1280, int height = 720, const std::vector<std::string>& imagePaths = {});
+	bool InitVideoFeed(const std::string& videoFilePath, const std::vector<std::string>& imagePaths = {});
 
 	void Run();
 

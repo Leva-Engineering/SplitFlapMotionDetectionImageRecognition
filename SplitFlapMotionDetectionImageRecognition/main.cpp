@@ -7,38 +7,29 @@
 
 int main()
 {
-	LiveFeedManager feedManager(1280, 720);
-	if (!feedManager.Initialize())
+	
+	App app;
+
+	std::vector<std::string> referenceImages = 
 	{
-		std::cerr << "Failed to initialize live feed manager." << std::endl;
-		return -1;
-	}
-
-	/*VideoFeedManager feedManager("split_flap2.mp4");
-	if (!feedManager.Initialize())
-	{
-		std::cerr << "Failed to initialize video feed manager." << std::endl;
-		return -1;
-	}*/
-
-	// 1. Initialize MotionDetector completely
-	MotionDetector motionDetector(feedManager);
-	motionDetector.Initialize();
-
-	// 2. Initialize ImageTracker completely
-	ImageTracker imageTracker(feedManager);
-	std::vector<std::string> referenceImages = {
 		"SplitFlap.jpg",
 		"Whale.jpg"
 	};
 
-	if (!imageTracker.Initialize(referenceImages))
+	//INIT VIDEO FEED
+	if (!app.InitVideoFeed("split_flap2.mp4", referenceImages))
 	{
-		std::cerr << "Warning: Tracker module could not target any image source paths." << std::endl;
+		std::cerr << "Error: Could not initialize video feed." << std::endl;
+		return -1;
 	}
 
-	// 3. Now it is completely safe to pass them to App
-	App app(feedManager, &motionDetector, &imageTracker);
+	//INIT LIVE FEED
+	/*if (!app.InitLiveFeed(1280, 720, referenceImages))
+	{
+		std::cerr << "Error: Could not initialize live feed." << std::endl;
+		return -1;
+	}*/
+
 	app.Run();
 
 	return 0;

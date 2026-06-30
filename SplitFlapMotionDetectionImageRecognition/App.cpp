@@ -1,8 +1,8 @@
 #include "App.h"
 #include <iostream>
 
-App::App(IFeedManager& feedManager, MotionDetector* motionDetector, ImageTracker* imageTracker)
-	: feedManager(feedManager), motionDetector(motionDetector), imageTracker(imageTracker), isRunning(false)
+App::App()
+	: feedManager(nullptr), isRunning(false)
 { }
 
 App::~App()
@@ -11,6 +11,60 @@ App::~App()
 	if (motionDetectThread.joinable()) motionDetectThread.join();
 	if (imageTrackThread.joinable()) imageTrackThread.join();
 	cv::destroyAllWindows();
+	
+	if (feedManager != nullptr)
+	{
+		delete feedManager;
+		feedManager = nullptr;
+	}
+}
+
+bool App::InitLiveFeed(int width, int height, const std::vector<std::string>& imagePaths)
+{
+	liveFeedManager = new LiveFeedManager(width, height);
+	if (!liveFeedManager->Initialize())
+	{
+		std::cerr << "Error: Could not initialize live feed manager." << std::endl;
+		return false;
+	}
+
+	feedManager = liveFeedManager;
+
+	motionDetector = new MotionDetector(*feedManager);
+	motionDetector->Initialize();
+
+	imageTracker = new ImageTracker(*feedManager);
+	if (!imagePaths.empty() && !imageTracker->Initialize(imagePaths))
+	{
+		std::cerr << "Error: Could not initialize image tracker with provided image targets." << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool App::InitVideoFeed(const std::string& videoFilePath, const std::vector<std::string>& imagePaths)
+{
+	videoFeedManager = new VideoFeedManager(videoFilePath);
+	if (!videoFeedManager->Initialize())
+	{
+		std::cerr << "Error: Could not initialize video feed manager." << std::endl;
+		return false;
+	}
+
+	feedManager = videoFeedManager;
+
+	motionDetector = new MotionDetector(*feedManager);	
+	motionDetector->Initialize();
+
+	imageTracker = new ImageTracker(*feedManager);
+	if (!imagePaths.empty() && !imageTracker->Initialize(imagePaths))
+	{
+		std::cerr << "Error: Could not initialize image tracker with provided image targets." << std::endl;
+		return false;
+	}
+
+	return true;
 }
 
 //Method that runs on a dedicated background thread (motionDetectThread) to process motion detection frames
@@ -113,7 +167,7 @@ void App::Run()
 		auto frameStart = std::chrono::steady_clock::now();
 
 		//Get next frame from the active feed manager
-		if (!feedManager.ReadNextFrame(frame))
+		if (!feedManager->ReadNextFrame(frame))
 		{
 			std::cerr << "Error: Could not read frame from active feed manager." << std::endl;
 			break;
