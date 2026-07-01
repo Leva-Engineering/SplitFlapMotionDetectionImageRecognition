@@ -24,7 +24,22 @@ void ConfigManager::LoadConfig(const fs::path& configPath)
 			config.liveFeedHeight = j["liveFeedHeight"].get<int>();
 		if (j.contains("videoFeedFile"))
 			config.videoFeedFile = j["videoFeedFile"].get<std::string>();
+		
+		//ROI
+		if (j.contains("roi"))
+		{
+			auto roi = j["roi"];
+			config.roi.x = roi.value("x", config.roi.x);
+			config.roi.y = roi.value("y", config.roi.y);
+			config.roi.width = roi.value("width", config.roi.width);
+			config.roi.height = roi.value("height", config.roi.height);
+		}
 
+		//ImageTargets
+		if (j.contains("imageTargets") && j["imageTargets"].is_array())
+		{
+			config.imageTargets = j["imageTargets"].get<std::vector<std::string>>();
+		}
 
 	}
 	catch (std::exception& ex)

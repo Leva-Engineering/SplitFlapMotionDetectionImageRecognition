@@ -47,8 +47,8 @@ public:
 	App();
 	~App();
 
-	bool InitLiveFeed(const std::vector<std::string>& imagePaths = {});
-	bool InitVideoFeed(const std::vector<std::string>& imagePaths = {});
+	bool InitLiveFeed();
+	bool InitVideoFeed();
 
 	void Run();
 	Config& GetConfig() override;

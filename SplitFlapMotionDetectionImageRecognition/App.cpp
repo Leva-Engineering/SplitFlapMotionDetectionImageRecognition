@@ -46,9 +46,12 @@ App::~App()
 	}
 }
 
-bool App::InitLiveFeed(const std::vector<std::string>& imagePaths)
+bool App::InitLiveFeed()
 {
-	liveFeedManager = new LiveFeedManager(GetConfig().liveFeedWidth, GetConfig().liveFeedHeight);
+	Config config = GetConfig();
+	std::vector<std::string> imageTargets = config.imageTargets;
+
+	liveFeedManager = new LiveFeedManager(config.liveFeedWidth, config.liveFeedHeight);
 	if (!liveFeedManager->Initialize())
 	{
 		Logger::LogApp(MessageType::ERRORS, "App", "InitLiveFeed", "Error could not initialize live feed manager");
@@ -58,10 +61,10 @@ bool App::InitLiveFeed(const std::vector<std::string>& imagePaths)
 	feedManager = liveFeedManager;
 
 	motionDetector = new MotionDetector(*feedManager);
-	motionDetector->Initialize();
+	motionDetector->Initialize(config.motionThreshold, config.debounceMotionThreshold, config.debounceStillThreshold, config.mog2History, config.mog2Threshold, cv::Rect(config.roi.x, config.roi.y, config.roi.width, config.roi.height));
 
 	imageTracker = new ImageTracker(*feedManager);
-	if (!imagePaths.empty() && !imageTracker->Initialize(imagePaths))
+	if (!imageTargets.empty() && !imageTracker->Initialize(imageTargets))
 	{
 		Logger::LogApp(MessageType::ERRORS, "App", "InitLiveFeed", "Could not initialize image tracker with provided image targets");
 		return false;
@@ -71,8 +74,11 @@ bool App::InitLiveFeed(const std::vector<std::string>& imagePaths)
 	return true;
 }
 
-bool App::InitVideoFeed(const std::vector<std::string>& imagePaths)
+bool App::InitVideoFeed()
 {
+	Config config = GetConfig();
+	std::vector<std::string> imageTargets = config.imageTargets;
+
 	videoFeedManager = new VideoFeedManager(GetConfig().videoFeedFile);
 	if (!videoFeedManager->Initialize())
 	{
@@ -86,7 +92,7 @@ bool App::InitVideoFeed(const std::vector<std::string>& imagePaths)
 	motionDetector->Initialize();
 
 	imageTracker = new ImageTracker(*feedManager);
-	if (!imagePaths.empty() && !imageTracker->Initialize(imagePaths))
+	if (!imageTargets.empty() && !imageTracker->Initialize(imageTargets))
 	{
 		Logger::LogApp(MessageType::ERRORS, "App", "InitVideoFeed", "Could not initialize image tracker with provided image targets");
 		return false;

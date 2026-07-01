@@ -13,20 +13,14 @@ int main()
 	App app;
 	Logger::Clear();
 
-	std::vector<std::string> referenceImages = 
-	{
-		"SplitFlap.jpg",
-		"Whale.jpg"
-	};
-
 	//INIT VIDEO FEED
-	if (!app.InitVideoFeed(referenceImages))
+	if (!app.InitVideoFeed())
 	{
 		return -1;
 	}
 
 	//INIT LIVE FEED
-	/*if (!app.InitLiveFeed(referenceImages))
+	/*if (!app.InitLiveFeed())
 	{
 		return -1;
 	}*/
