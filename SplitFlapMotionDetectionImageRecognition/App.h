@@ -35,6 +35,7 @@ private:
 	MotionState lastMotionState = MotionState::NotRotating;
 	bool lastTrackingState = true;
 	std::string imageTrackingMsg = "";
+	std::string monitoringMsg = "";
 
 
 public:

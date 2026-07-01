@@ -286,26 +286,28 @@ void App::CheckMotionAndTrackingState()
 			//If there is motion, just print the motion state
 			if (motionDetector->GetCurrentState() == MotionState::Rotating)
 			{
-				std::cout << "[Motion Detect] Rotation started" << std::endl;
+				monitoringMsg = "[Motion Detect] Rotation started\n";
 			}
 			//If the there is no motion (rotation stopped)
 			else
 			{
 				//prints the motion state
-				std::cout << "[Motion Detect] Rotation stopped" << std::endl;
+				monitoringMsg = "[Motion Detect] Rotation stopped\n";
+
 				if (!imageTrackingMsg.empty())
 				{
 					//prints image tracking state
-					std::cout << imageTrackingMsg << std::endl;
+					monitoringMsg += imageTrackingMsg;
 					imageTrackingMsg = "";
 				}
 				//if the image tracking message is empty, it means it couldn't recognise the image
 				else if (imageTracker != nullptr && imageTracker->HasLastMatchFailed())
 				{
-					std::cout << "[Image Tracking] Image not recognised" << std::endl;
+					monitoringMsg += "[Image Tracking] Image not recognised";
 				}
 			}
 
+			std::cout << monitoringMsg;
 			lastMotionState = motionDetector->GetCurrentState();
 		}
 	}
