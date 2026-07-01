@@ -32,6 +32,10 @@ private:
 	std::chrono::steady_clock::time_point lastTime = std::chrono::steady_clock::now();
 	int frameCount = 0;
 	double fps = 0.0;
+	MotionState lastMotionState = MotionState::Rotating;
+	bool lastTrackingState = true;
+	std::string imageTrackingMsg = "";
+
 
 public:
 	App();
@@ -47,4 +51,5 @@ private:
 	void TrackerWorkerLoop();
 	void Force60FPS(const std::chrono::steady_clock::time_point& frameStart);
 	void HandleKeyboardInput();
+	void CheckMotionAndTrackingState();
 };

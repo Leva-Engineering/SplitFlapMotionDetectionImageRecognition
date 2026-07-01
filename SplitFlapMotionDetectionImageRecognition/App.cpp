@@ -237,6 +237,8 @@ void App::Run()
 			}
 		}
 
+		CheckMotionAndTrackingState();
+
 		HandleKeyboardInput();	
 		
 		Force60FPS(frameStart);
@@ -255,5 +257,56 @@ void App::HandleKeyboardInput()
 	else if ((key == 'd' || key == 'D') && motionDetector != nullptr)
 	{
 		motionDetector->ToggleDebugMask();
+	}
+}
+
+void App::CheckMotionAndTrackingState()
+{
+	//1.First check Image Tracker state and updates the image tracking message to display
+	if (imageTracker != nullptr)
+	{
+		//Compares with last state so it updates the message only once
+		if (imageTracker->IsTracking() != lastTrackingState)
+		{
+			if (imageTracker->IsTracking())
+			{
+				imageTrackingMsg = "[Image Tracking] Reference image detected: " + imageTracker->GetCurrentTargetPath();
+			}
+
+			lastTrackingState = imageTracker->IsTracking();
+		}
+	}
+
+	//2.Check Motion Detector state
+	if (motionDetector != nullptr)
+	{
+		//Compares with last state so it prints only once
+		if (motionDetector->GetCurrentState() != lastMotionState)
+		{
+			//If there is motion, just print the motion state
+			if (motionDetector->GetCurrentState() == MotionState::Rotating)
+			{
+				std::cout << "[Motion Detect] Rotation started" << std::endl;
+			}
+			//If the there is no motion (rotation stopped)
+			else
+			{
+				//prints the motion state
+				std::cout << "[Motion Detect] Rotation stopped" << std::endl;
+				if (!imageTrackingMsg.empty())
+				{
+					//prints image tracking state
+					std::cout << imageTrackingMsg << std::endl;
+					imageTrackingMsg = "";
+				}
+				//if the image tracking message is empty, it means it couldn't recognise the image
+				else if (imageTracker != nullptr && imageTracker->HasLastMatchFailed())
+				{
+					std::cout << "[Image Tracking] Image not recognised" << std::endl;
+				}
+			}
+
+			lastMotionState = motionDetector->GetCurrentState();
+		}
 	}
 }
